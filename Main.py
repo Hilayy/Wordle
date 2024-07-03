@@ -1,7 +1,7 @@
 import sys
 import time
 
-from PyQt5.QtGui import QCursor, QMouseEvent, QIcon
+from PyQt5.QtGui import QCursor, QMouseEvent, QIcon, QMovie, QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLineEdit, QMessageBox, QLabel, QPushButton
 from PyQt5.QtCore import Qt, QEvent, QTimer, QPoint, QSize
 import random
@@ -21,36 +21,45 @@ class WordleGUI(QWidget):
     def initUI(self):
         self.setGeometry(100, 100, 400, 300)
         self.grid_layout = QGridLayout()
+        self.grid_layout.setContentsMargins(5, 5, 5, 5)  # Set margins around the grid layout
+        self.grid_layout.setSpacing(5)  # Set spacing between widgets
         self.text_boxes = []
 
-        # Add the button to the top left
         self.button = QPushButton(self)
         self.button.setIcon(QIcon('Images/restart.png'))
         self.button.setIconSize(QSize(50, 50))
         self.button.clicked.connect(self.restart_game)
-        self.button.setFixedSize(100, 100)
+        self.button.setFixedSize(50, 50)
         self.button.setStyleSheet("QPushButton { background-color: transparent; border: none; }")
-        self.grid_layout.addWidget(self.button, 0, 0)
+        self.grid_layout.addWidget(self.button, 0, 0, 1, 1, Qt.AlignLeft | Qt.AlignTop)
+
+        # Add an empty widget to the remaining space in the first row
+        spacer = QWidget(self)
+        self.grid_layout.addWidget(spacer, 0, 1, 1, 4)
+
+        # Add vertical spacer to create a 50-pixel gap
+        vertical_spacer = QWidget(self)
+        vertical_spacer.setFixedHeight(50)
+        self.grid_layout.addWidget(vertical_spacer, 1, 0, 1, 5)
 
         for i in range(6):
             row = []
             for j in range(5):
-                self.grid_layout.setSpacing(5)
                 text_box = QLineEdit(self)
                 text_box.setReadOnly(True)
+                text_box.setFixedSize(70, 70)
+                text_box.setAlignment(Qt.AlignCenter)  # Align text to center
                 text_box.setStyleSheet("""
                     QLineEdit {
                         border: 2px solid #33364f;
                         border-radius: 10px;
-                        padding: 5px;
-                        width: 70px;
-                        height: 70px;
                         font-size: 32px;
                         color: white;
+                        font-weight: bold;
+                        text-align: center;
                     }
                 """)
-                text_box.setAlignment(Qt.AlignCenter)
-                self.grid_layout.addWidget(text_box, i + 1, j)  # Start adding text boxes from row 1
+                self.grid_layout.addWidget(text_box, i + 2, j, Qt.AlignCenter)  # Align widget to center
                 row.append(text_box)
             self.text_boxes.append(row)
 
@@ -60,6 +69,10 @@ class WordleGUI(QWidget):
         self.button.setFocusPolicy(Qt.NoFocus)
         self.setStyleSheet("background-color: #252636;")
 
+        # Ensure all columns have equal width
+        for col in range(5):
+
+            self.grid_layout.setColumnStretch(col, 1)
     def get_random_word(self, words):
         random_number = random.randint(0, len(words) - 1)
         self.word = WORDS[random_number].upper()
@@ -142,6 +155,7 @@ class WordleGUI(QWidget):
         color_dict = {'V': 'green', '-': '#FFDB58', 'X': 'gray'}
 
         for i in range(5):
+            color = color_dict[feedback[i]]
             self.text_boxes[self.current_row][i].setStyleSheet(f"""
                                         QLineEdit {{
                                             border-radius: 10px;
@@ -149,16 +163,15 @@ class WordleGUI(QWidget):
                                             width: 70px;
                                             height: 70px;
                                             font-size: 32px;
-                                            background-color: {color_dict[feedback[i]]};
+                                            background-color: {color};
                                             text-align: center;
                                             color: white;
+                                            font-weight: bold;
                                         }}
                                     """)
             self.text_boxes[self.current_row][i].setAlignment(Qt.AlignCenter)
 
 
-    def temp(self):
-        print(1)
 
     def restart_game(self):
         self.get_random_word(WORDS)
@@ -181,15 +194,23 @@ class WordleGUI(QWidget):
                                             font-size: 32px;
                                             text-align: center;
                                             color: white;
+                                            font-weight: bold;
                                         }}
                                     """)
         self.current_row = 0
         self.current_col = 0
+        self.turns = 0
         self.setFocus()
 
     def show_message(self, message_id: int) -> None:
-        messages_list = ["Congratulations, You Won!", self.word, 'Invalid word']
-        message = QLabel(messages_list[message_id], self)
+        messages_list = [["Unbelievable!!", "Amazing!", "Great!", "Well Done", "Nice One", "Phew.."], self.word,
+                         'Invalid word']
+        if message_id == 0:
+            text = messages_list[0][self.current_row]
+        else:
+            text = messages_list[message_id]
+
+        message = QLabel(text, self)
         message.setGeometry(self.geometry().center().x() - 95, self.geometry().center().y() - 25, 190, 50)
 
         message.setStyleSheet("""
