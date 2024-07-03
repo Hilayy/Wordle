@@ -97,6 +97,8 @@ class WordleGUI(QWidget):
                 char = chr(key).upper()
                 self.text_boxes[self.current_row][self.current_col].setText(char)
                 self.current_col += 1
+            elif  Qt.Key_1 <= key <= Qt.Key_9:
+                self.restart_game()
             elif key == Qt.Key_Backspace:
                 if self.current_col > 0:
                     self.current_col -= 1
