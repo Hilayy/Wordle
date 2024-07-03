@@ -17,6 +17,7 @@ class WordleGUI(QWidget):
         self.guess = None
         self.turns = 0
         self.get_random_word(WORDS)
+        self.game_ended = False
 
     def initUI(self):
         self.setGeometry(100, 100, 400, 300)
@@ -81,7 +82,7 @@ class WordleGUI(QWidget):
     def eventFilter(self, obj, event):
         if event.type() == QEvent.KeyPress:
             key = event.key()
-            if Qt.Key_A <= key <= Qt.Key_Z:
+            if Qt.Key_A <= key <= Qt.Key_Z and self.game_ended is False:
                 if self.current_col > 4:
                     return True
                 char = chr(key).upper()
@@ -147,9 +148,11 @@ class WordleGUI(QWidget):
 
         if all(x == 'V' for x in feedback):
             self.show_message(0)
+            self.game_ended = True
 
-        if self.turns == 6:
+        elif self.turns == 6:
             self.show_message(1)
+            self.game_ended = False
 
     def color_characters(self, feedback: str) -> None:
         color_dict = {'V': 'green', '-': '#FFDB58', 'X': 'gray'}
@@ -179,6 +182,8 @@ class WordleGUI(QWidget):
 
         if self.text_boxes and self.text_boxes[0]:
             self.text_boxes[0][0].setFocus()
+
+        self.game_ended = False
 
     def clear_grid(self):
         for i in range(6):
