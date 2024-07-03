@@ -18,10 +18,12 @@ class WordleGUI(QWidget):
         self.get_random_word(WORDS)
         self.game_ended = False
         self.streak = 0
-        self.won = False;
+        self.won = False
 
     def initUI(self):
+        self.setWindowIcon(QIcon('Images/logo.png'))
         self.setGeometry(100, 100, 400, 300)
+        self.setFixedSize(400, 555)
         self.grid_layout = QGridLayout()
         self.grid_layout.setContentsMargins(5, 5, 5, 5)
         self.grid_layout.setSpacing(5)
@@ -37,9 +39,9 @@ class WordleGUI(QWidget):
 
         self.button = QPushButton(self)
         self.button.setIcon(QIcon('Images/restart.png'))
-        self.button.setIconSize(QSize(50, 50))
+        self.button.setIconSize(QSize(40, 40))
         self.button.clicked.connect(self.restart_game)
-        self.button.setFixedSize(50, 50)
+        self.button.setFixedSize(40, 40)
         self.button.setStyleSheet("QPushButton { background-color: transparent; border: none; }")
         self.grid_layout.addWidget(self.button, 0, 0, 1, 1, Qt.AlignLeft | Qt.AlignTop)
 
@@ -97,7 +99,7 @@ class WordleGUI(QWidget):
                 char = chr(key).upper()
                 self.text_boxes[self.current_row][self.current_col].setText(char)
                 self.current_col += 1
-            elif  Qt.Key_1 <= key <= Qt.Key_9:
+            elif Qt.Key_1 <= key <= Qt.Key_9:
                 self.restart_game()
             elif key == Qt.Key_Backspace:
                 if self.current_col > 0:
@@ -158,19 +160,28 @@ class WordleGUI(QWidget):
         self.turns += 1
 
         if all(x == 'V' for x in feedback):
-            self.show_message(0)
-            self.game_ended = True
-            self.streak += 1
-            self.won = True
+            self.handle_win()
 
         elif self.turns == 6:
-            self.show_message(1)
-            self.streak = 0
-            self.game_ended = True
-            self.won = False
+            self.handle_loss()
+
+    def handle_win(self):
+        self.show_message(0)
+        self.game_ended = True
+        self.streak += 1
+        self.check_streak()
+        self.won = True
+
+    def handle_loss(self):
+        self.streak = 0
+        self.check_streak()
+        self.show_message(1)
+        self.game_ended = True
+        self.won = False
+
 
     def color_characters(self, feedback: str) -> None:
-        color_dict = {'V': 'green', '-': '#FFDB58', 'X': 'gray'}
+        color_dict = {'V': '#179931', '-': '#dbb90f', 'X': 'gray'}
 
         for i in range(5):
             color = color_dict[feedback[i]]
@@ -239,14 +250,14 @@ class WordleGUI(QWidget):
             text = messages_list[message_id]
 
         message = QLabel(text, self)
-        message.setGeometry(self.geometry().center().x() - 95, self.geometry().center().y() - 25, 190, 50)
+        message.setGeometry(self.geometry().center().x() - 95, self.geometry().center().y() - 240, 190, 50)
 
         message.setStyleSheet("""
                     QLabel {
                         background-color: #2a3233;
                         color: white;
-                        font-size: 12px;
-                        padding: 20px;
+                        font-size: 16px;
+                        padding: 10px;
                         border-radius: 20px;
                     }
                 """)

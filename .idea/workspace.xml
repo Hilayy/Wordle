@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a854b32-e2c5-43cd-903d-95468e96807c" name="Changes" comment="Added streak feature, when the user wins the game 3 or more times in a row,&#10;a flame gif appears and when the streak ends the gif goes invisible">
+    <list default="true" id="5a854b32-e2c5-43cd-903d-95468e96807c" name="Changes" comment="Now the user can press any digit to restart the game in addition to the restart button">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -42,7 +43,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
-  <component name="RunManager" selected="Python.Main">
+  <component name="RunManager">
     <configuration name="Main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Wordle" />
       <option name="ENV_FILES" value="" />
@@ -157,13 +158,22 @@
       <option name="project" value="LOCAL" />
       <updated>1720025463755</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Now the user can press any digit to restart the game in addition to the restart button">
+      <option name="closed" value="true" />
+      <created>1720025748229</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1720025748229</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Removed unnecessary files" />
     <MESSAGE value="Now the user can't keep write characters into text boxes when the game has ended" />
     <MESSAGE value="Added streak feature, when the user wins the game 3 or more times in a row,&#10;a flame gif appears and when the streak ends the gif goes invisible" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added streak feature, when the user wins the game 3 or more times in a row,&#10;a flame gif appears and when the streak ends the gif goes invisible" />
+    <MESSAGE value="Now the user can press any digit to restart the game in addition to the restart button" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now the user can press any digit to restart the game in addition to the restart button" />
   </component>
 </project>
