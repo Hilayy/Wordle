@@ -7,7 +7,6 @@ from PyQt5.QtCore import Qt, QEvent, QTimer, QPoint, QSize
 import random
 
 
-
 class WordleGUI(QWidget):
     def __init__(self):
         super().__init__()
@@ -18,13 +17,23 @@ class WordleGUI(QWidget):
         self.turns = 0
         self.get_random_word(WORDS)
         self.game_ended = False
+        self.streak = 0
+        self.won = False;
 
     def initUI(self):
         self.setGeometry(100, 100, 400, 300)
         self.grid_layout = QGridLayout()
-        self.grid_layout.setContentsMargins(5, 5, 5, 5)  # Set margins around the grid layout
-        self.grid_layout.setSpacing(5)  # Set spacing between widgets
+        self.grid_layout.setContentsMargins(5, 5, 5, 5)
+        self.grid_layout.setSpacing(5)
         self.text_boxes = []
+
+        self.gif = QLabel(self)
+        self.gif.setAlignment(Qt.AlignRight | Qt.AlignTop)
+        movie = QMovie('Images/streak.gif')
+        self.gif.setMovie(movie)
+        movie.start()
+        self.gif.setVisible(False)
+        self.grid_layout.addWidget(self.gif, 0, 4, 1, 1)
 
         self.button = QPushButton(self)
         self.button.setIcon(QIcon('Images/restart.png'))
@@ -36,7 +45,7 @@ class WordleGUI(QWidget):
 
         # Add an empty widget to the remaining space in the first row
         spacer = QWidget(self)
-        self.grid_layout.addWidget(spacer, 0, 1, 1, 4)
+        self.grid_layout.addWidget(spacer, 0, 1, 1, 3)
 
         # Add vertical spacer to create a 50-pixel gap
         vertical_spacer = QWidget(self)
@@ -72,14 +81,14 @@ class WordleGUI(QWidget):
 
         # Ensure all columns have equal width
         for col in range(5):
-
             self.grid_layout.setColumnStretch(col, 1)
-    def get_random_word(self, words):
+
+    def get_random_word(self, words) -> None:
         random_number = random.randint(0, len(words) - 1)
         self.word = WORDS[random_number].upper()
         print(self.word)
 
-    def eventFilter(self, obj, event):
+    def eventFilter(self, obj, event) -> bool:
         if event.type() == QEvent.KeyPress:
             key = event.key()
             if Qt.Key_A <= key <= Qt.Key_Z and self.game_ended is False:
@@ -108,12 +117,12 @@ class WordleGUI(QWidget):
         word = self.guess.lower()
         return word in WORDS
 
-    def showEvent(self, event):
+    def showEvent(self, event) -> None:
         for row in self.text_boxes:
             for text_box in row:
                 text_box.installEventFilter(self)
 
-    def create_word_dict(self, word):
+    def create_word_dict(self, word: str) -> dict[chr: int]:
         d = {}
         for c in word:
             if c in d.keys():
@@ -122,7 +131,7 @@ class WordleGUI(QWidget):
                 d[c] = 1
         return d
 
-    def give_feedback(self):
+    def give_feedback(self) -> None:
         guess = self.guess
         feedback = [None, None, None, None, None]
         word_dict = self.create_word_dict(self.word)
@@ -149,10 +158,14 @@ class WordleGUI(QWidget):
         if all(x == 'V' for x in feedback):
             self.show_message(0)
             self.game_ended = True
+            self.streak += 1
+            self.won = True
 
         elif self.turns == 6:
             self.show_message(1)
-            self.game_ended = False
+            self.streak = 0
+            self.game_ended = True
+            self.won = False
 
     def color_characters(self, feedback: str) -> None:
         color_dict = {'V': 'green', '-': '#FFDB58', 'X': 'gray'}
@@ -174,18 +187,26 @@ class WordleGUI(QWidget):
                                     """)
             self.text_boxes[self.current_row][i].setAlignment(Qt.AlignCenter)
 
-
-
-    def restart_game(self):
+    def restart_game(self) -> None:
         self.get_random_word(WORDS)
         self.clear_grid()
 
         if self.text_boxes and self.text_boxes[0]:
             self.text_boxes[0][0].setFocus()
 
+        if not self.won:
+            self.streak = 0
         self.game_ended = False
+        self.check_streak()
+        self.won = False
 
-    def clear_grid(self):
+    def check_streak(self):
+        if self.streak >= 3:
+            self.gif.setVisible(True)
+        else:
+            self.gif.setVisible(False)
+
+    def clear_grid(self) -> None:
         for i in range(6):
             for j in range(5):
                 self.text_boxes[i][j].setText('')

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a854b32-e2c5-43cd-903d-95468e96807c" name="Changes" comment="Removed unnecessary files">
+    <list default="true" id="5a854b32-e2c5-43cd-903d-95468e96807c" name="Changes" comment="Now the user can't keep write characters into text boxes when the game has ended">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
     </list>
@@ -142,11 +142,20 @@
       <option name="project" value="LOCAL" />
       <updated>1720013835287</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Now the user can't keep write characters into text boxes when the game has ended">
+      <option name="closed" value="true" />
+      <created>1720024206557</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1720024206557</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Removed unnecessary files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed unnecessary files" />
+    <MESSAGE value="Now the user can't keep write characters into text boxes when the game has ended" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now the user can't keep write characters into text boxes when the game has ended" />
   </component>
 </project>
